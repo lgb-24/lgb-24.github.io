@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>游戏 · 教程 — lgb's blog</title>
+    <style>
+        * { box-sizing: border-box; }
+        :root {
+            --glass: rgba(0,0,0,0.45);
+            --glass-border: rgba(255,255,255,0.08);
+            --glass-hover: rgba(255,255,255,0.06);
+        }
+        body {
+            margin: 0; min-height: 100vh;
+            font-family: "Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+            color: rgba(247,252,255,0.92);
+            overflow-x: hidden;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+        body::before {
+            content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background: linear-gradient(160deg, rgba(5,9,20,0.55), rgba(11,19,37,0.42) 50%, rgba(6,10,19,0.55));
+        }
+        .panel { position: relative; z-index: 1; margin: 0 auto; max-width: 1100px; padding: 28px 24px 64px; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; margin-bottom: 32px;
+            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 999px;
+            color: rgba(247,252,255,0.85); font-weight: 700; font-size: 14px; text-decoration: none;
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            transition: transform .24s, border-color .24s, background .24s;
+        }
+        .back-link:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); }
+        .hero {
+            position: relative; margin-bottom: 40px; padding: clamp(28px,5vw,48px); border-radius: 28px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%); overflow: hidden;
+        }
+        .hero::before {
+            content: ""; position: absolute; top: -60%; right: -10%; width: 420px; height: 420px;
+            border-radius: 50%; background: radial-gradient(circle, rgba(112,216,255,0.1), transparent 70%); pointer-events: none;
+        }
+        .kicker {
+            display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px;
+            font-size: 12px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,0.55);
+        }
+        .kicker::before { content: ""; width: 20px; height: 2px; border-radius: 999px; background: linear-gradient(90deg, rgba(112,216,255,0.6), rgba(184,153,255,0.4)); }
+        h1 {
+            font-size: clamp(34px,6vw,60px); line-height: 1.1; margin: 0 0 14px; font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #b8e8ff 40%, #d4b8ff 70%, #fff 100%);
+            background-size: 200% 100%; -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; animation: shimmer 6s ease-in-out infinite;
+        }
+        @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .lead { color: rgba(247,252,255,0.6); font-size: 17px; line-height: 1.9; margin: 0; max-width: 58em; }
+        .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+        .card {
+            position: relative; background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 20px; backdrop-filter: blur(16px) saturate(138%); -webkit-backdrop-filter: blur(16px) saturate(138%);
+            padding: clamp(20px,4vw,30px);
+            transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s, border-color .28s;
+        }
+        .card:hover {
+            transform: translateY(-6px); border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.3), 0 0 40px rgba(112,216,255,0.06);
+        }
+        .card h3 { color: rgba(247,252,255,0.95); margin: 0 0 8px; font-size: clamp(18px,3vw,22px); }
+        .card p { color: rgba(247,252,255,0.55); font-size: 15px; line-height: 1.8; margin: 0 0 16px; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px;
+            background: linear-gradient(135deg, rgba(112,216,255,0.25), rgba(184,153,255,0.2));
+            border: 1px solid rgba(255,255,255,0.16); border-radius: 999px;
+            color: #fff; font-weight: 700; font-size: 14px; text-decoration: none;
+            transition: transform .2s, box-shadow .2s, border-color .2s;
+        }
+        .btn:hover { transform: scale(1.03); border-color: rgba(255,255,255,0.35); box-shadow: 0 8px 28px rgba(112,216,255,0.12); }
+        .tag {
+            display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
+            background: rgba(112,216,255,0.15); color: rgba(184,232,255,0.85); margin-bottom: 8px;
+        }
+        .steps { margin-top: 18px; }
+        .step {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px;
+            padding: 14px 18px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start;
+        }
+        .step-num {
+            flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(112,216,255,0.4), rgba(184,153,255,0.3));
+            display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px;
+        }
+        .step-text { color: rgba(247,252,255,0.7); font-size: 14px; line-height: 1.8; }
+        .step-text code {
+            background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 6px;
+            font-family: "Fira Code",monospace; font-size: 13px;
+        }
+        footer { text-align: center; color: rgba(247,252,255,0.3); font-size: 13px; margin-top: 48px; }
+        footer a { color: rgba(184,232,255,0.5); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <script>
+        (function(){
+            var wallpapers = [
+                "https://haowallpaper.com/link//common/file/getCroppingImg/19121827374322560",
+                "https://haowallpaper.com/link//common/file/getCroppingImg/19111369036813184",
+                "https://haowallpaper.com/link//common/file/getCroppingImg/18834482406280576",
+                "https://haowallpaper.com/link//common/file/getCroppingImg/18772863517904256",
+                "https://haowallpaper.com/link//common/file/getCroppingImg/18601605145677184",
+                "https://haowallpaper.com/link//common/file/getCroppingImg/18347150586858880",
+                "https://haowallpaper.com/link//common/file/getCroppingImg/18193731367128448",
+                "https://haowallpaper.com/link//common/file/getCroppingImg/15789130517090624"
+            ];
+            var id = Math.floor(Math.random() * wallpapers.length);
+            document.body.style.backgroundImage = "url('" + wallpapers[id] + "')";
+        })();
+    </script>
+    <div class="panel">
+        <a class="back-link" href="/">&#8592; 返回博客</a>
+
+        <div class="hero">
+            <div class="kicker">Game Tutorial</div>
+            <h1>游戏の教程</h1>
+            <p class="lead">收集一些有趣的浏览器小游戏，附带教程说明。打开即可游玩，无需安装。</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <span class="tag">Three.js</span>
+                <h3>Magic Christmas Tree</h3>
+                <p>基于 Three.js 的 3D 交互圣诞树，支持摄像头手势识别。挥动你的手来控制粒子动画，体验魔法般的视觉效果。</p>
+                <a class="btn" href="/game/christmas-tree.html">&#9654; 开始游玩</a>
+            </div>
+            <div class="card">
+                <span class="tag">Coming Soon</span>
+                <h3>更多游戏</h3>
+                <p>新的游戏即将到来。如果你有好玩的浏览器游戏想要分享，欢迎联系我。</p>
+                <span class="btn" style="opacity:0.5;">敬请期待</span>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:24px; max-width:100%;">
+            <h3 style="margin-top:0;">Magic Christmas Tree 教程</h3>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-text">打开游戏页面，浏览器会请求<strong>摄像头权限</strong>，点击"允许"。</div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-text">等待加载完成（约 5-10 秒），你会看到一棵发光的 3D 圣诞树。</div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-text"><strong>手势控制：</strong>张开手掌 → 粒子散开；握拳 → 粒子聚拢；手指点数决定特效模式。</div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-text"><strong>键盘快捷键：</strong><code>W</code> 流星墙模式、<code>R</code> 环形画廊、<code>Q</code> 高清照片、<code>E</code> 回到默认。</div>
+                </div>
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <div class="step-text">右上角小窗显示摄像头画面。点击 <code>上传照片</code> 按钮可以加入自定义图片到画廊中。</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>lgb's blog — <a href="/">回到首页</a></p>
+        </footer>
+    </div>
+</body>
+</html>

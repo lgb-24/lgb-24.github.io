@@ -1,0 +1,86 @@
+# Butterfly Theme Configuration
+
+# Navigation
+nav:
+  logo:
+  display_title: true
+  fixed: true
+
+menu:
+  首页: / || fas fa-home
+  Game: /game/tutorial/ || fas fa-gamepad
+  分类: /categories/ || fas fa-bookmark
+  标签: /tags/ || fas fa-tags
+  归档: /archives/ || fas fa-box-archive
+  关于: /about/ || fas fa-id-card
+
+# Code blocks
+code_blocks:
+  theme: darker
+  macStyle: false
+  copy: true
+
+# Social links
+social:
+  fab fa-github: https://github.com/lgb-24 || Github || '#24292e'
+
+# Images
+favicon: /images/avatar.jpg
+avatar:
+  img: /images/avatar.jpg
+  effect: true
+
+# Banner images - use haowallpaper
+index_img: https://haowallpaper.com/link//common/file/getCroppingImg/19111369036813184
+archive_img: https://haowallpaper.com/link//common/file/getCroppingImg/18834482406280576
+tag_img: https://haowallpaper.com/link//common/file/getCroppingImg/18772863517904256
+category_img: https://haowallpaper.com/link//common/file/getCroppingImg/18601605145677184
+
+# Post settings
+post_meta:
+  page:
+    date_type: created
+    categories: true
+    tags: true
+  post:
+    date_type: both
+    categories: true
+    tags: true
+
+# Sidebar
+aside:
+  enable: true
+  mobile: false
+  position: right
+  card_author:
+    enable: true
+    description: 写代码，攒壁纸，记录折腾日常。一个热爱 Web 的小站。
+    button:
+      enable: true
+      icon: fab fa-github
+      text: GitHub
+      link: https://github.com/lgb-24
+  card_announcement:
+    enable: true
+    content: 欢迎来到我的博客！分享技术、游戏和壁纸。
+  card_categories:
+    enable: true
+    limit: 8
+  card_tags:
+    enable: true
+    limit: 20
+
+# Footer
+footer:
+  owner:
+    since: 2026
+    author: lgb
+
+# Appearance
+darkmode: true
+auto_darkmode: true
+
+# Inject custom CSS for game-like glassmorphism feel
+inject:
+  head:
+  bottom:
