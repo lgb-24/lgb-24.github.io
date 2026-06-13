@@ -200,21 +200,34 @@
         </span>
     </div>
 </div>
-<script src="/js/lib/typed.min.js"></script>
 <script>
 (function() {
     var el = document.getElementById('typed-subtitle');
     if (!el) return;
-    var sub = '当我猜到谜底，才发现 一切都已过去，岁月已换了谜底 ——席慕容《谜题》';
-    sub = sub.replace(/——/, '\n——');
-    new Typed('#typed-subtitle', {
-        strings: [sub],
-        typeSpeed: 100,
-        startDelay: 600,
-        showCursor: true,
-        cursorChar: '_',
-        loop: false
-    });
+    var text = '当我猜到谜底，才发现 一切都已过去，岁月已换了谜底 ——席慕容《谜题》';
+    var parts = text.split('——');
+    var lines = [parts[0], '——' + parts[1]];
+    var i = 0, lineIdx = 0, html = '';
+    var cursor = '<span class="typing-cursor">_</span>';
+    function type() {
+        if (lineIdx < lines.length) {
+            if (i < lines[lineIdx].length) {
+                html += lines[lineIdx].charAt(i);
+                i++;
+            } else {
+                lineIdx++;
+                i = 0;
+                if (lineIdx < lines.length) {
+                    html += '<br>';
+                }
+            }
+            el.innerHTML = html + cursor;
+            setTimeout(type, 100);
+        } else {
+            el.innerHTML = html;
+        }
+    }
+    setTimeout(type, 600);
 })();
 </script>
 <div

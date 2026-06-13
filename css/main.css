@@ -845,7 +845,13 @@ ol li {
     #home-head #home-info .info .wrap h3 {
         font-size: 24px;
         margin: 10px 0;
-        white-space: pre-line;
+    }
+    .typing-cursor {
+        animation: blink 0.7s step-end infinite;
+    }
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
     }
     #home-head #home-info .info .wrap h5 {
         font-size: 16px;
@@ -931,7 +937,6 @@ ol li {
     #home-head #home-info .info .wrap h3 {
         font-size: 20px;
         margin: 10px 0;
-        white-space: pre-line;
     }
     #home-head #home-info .info .wrap h5 {
         font-size: 14px;
