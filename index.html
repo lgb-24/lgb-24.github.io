@@ -206,6 +206,7 @@
     var el = document.getElementById('typed-subtitle');
     if (!el) return;
     var sub = '当我猜到谜底，才发现 一切都已过去，岁月已换了谜底 ——席慕容《谜题》';
+    sub = sub.replace(/——/, '\n——');
     new Typed('#typed-subtitle', {
         strings: [sub],
         typeSpeed: 100,
