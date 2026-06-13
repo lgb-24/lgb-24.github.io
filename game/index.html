@@ -23,20 +23,17 @@
             font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
             color: rgba(237, 247, 255, 0.95);
             background:
-                radial-gradient(circle at 14% 18%, rgba(141, 233, 255, 0.18), transparent 28vw),
-                radial-gradient(circle at 88% 8%, rgba(53, 106, 255, 0.18), transparent 24vw),
-                radial-gradient(circle at 72% 82%, rgba(123, 108, 255, 0.12), transparent 20vw),
-                linear-gradient(135deg, #050914, #0b1325 48%, #060a13);
+                url('/images/game-bg.jpg') center/cover no-repeat fixed;
             overflow-x: hidden;
             position: relative;
         }
 
-        body::after {
+        body::before {
             content: "";
-            position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
             background:
-                linear-gradient(120deg, rgba(2, 6, 16, 0.42), rgba(5, 12, 26, 0.16) 42%, rgba(3, 8, 18, 0.36)),
-                radial-gradient(circle at 50% 0, rgba(141, 233, 255, 0.16), transparent 42%);
+                linear-gradient(120deg, rgba(2, 6, 16, 0.65), rgba(5, 12, 26, 0.4) 42%, rgba(3, 8, 18, 0.6)),
+                radial-gradient(circle at 50% 0, rgba(141, 233, 255, 0.12), transparent 42%);
         }
 
         .game-particles {

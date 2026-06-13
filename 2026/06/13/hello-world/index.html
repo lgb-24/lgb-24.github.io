@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>Hello World | lgb的小站</title>
     <meta name="author" content="lgb" />
-    <meta name="description" content="" />
+    <meta name="description" content="一个基于 Hexo 和 GitHub Pages 的个人博客" />
     <meta name="keywords" content="" />
     <meta
         name="viewport"
@@ -249,6 +249,37 @@
         </transition>
         
     </div>
+    <div id="tab-title-config"
+        data-enable="1"
+        data-active-title="lgb的小站"
+        data-active-delay="2600"
+        data-default-title="lgb的小站"
+        data-inactive-title="∑(っ°Д°;)っ诶，不见了"
+        data-inactive-scroll-speed="180" hidden></div>
+    <script>
+        (() => {
+            const cfg = document.getElementById("tab-title-config");
+            if (!cfg || cfg.dataset.enable !== "1") return;
+            const dft = cfg.dataset.defaultTitle || document.title;
+            const act = cfg.dataset.activeTitle || dft;
+            const inact = cfg.dataset.inactiveTitle || dft;
+            const delay = Number(cfg.dataset.activeDelay) || 2600;
+            const speed = Number(cfg.dataset.inactiveScrollSpeed) || 180;
+            let timer = null, idx = 0;
+            function scrollTitle(text) {
+                idx = (idx + 1) % (text.length + 1);
+                document.title = text.substring(idx) + text.substring(0, idx);
+                timer = setTimeout(() => scrollTitle(text), speed);
+            }
+            function stopScroll() { clearTimeout(timer); timer = null; }
+            function onVis() {
+                if (document.hidden) { stopScroll(); scrollTitle(inact); }
+                else { stopScroll(); document.title = act; setTimeout(() => { document.title = dft; }, delay); }
+            }
+            document.addEventListener("visibilitychange", onVis);
+            document.title = dft;
+        })();
+    </script>
     <script src="/js/main.js"></script>
     
     
