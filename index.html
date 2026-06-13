@@ -225,10 +225,110 @@
         
 
 <div class="post">
-    <a href="/2026/06/13/hello-world/">
-        <h2 class="post-title">Hello World</h2>
+    <a href="/2026/06/14/gesture-game/">
+        <h2 class="post-title">Magic Christmas Tree — 手势识别圣诞树</h2>
     </a>
     <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E9%A1%B9%E7%9B%AE/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                项目
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/6/14
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <p>最近做了一个好玩的交互项目：基于 Three.js 和 MediaPipe Hands 的魔法圣诞树。</p>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><ul>
+<li><strong>Three.js</strong> — 3D 渲染引擎，负责圣诞树粒子、星云效果、照片墙和环形画廊</li>
+<li><strong>MediaPipe Hands</strong> — Google 的手部关键点检测，21 个关键点实时追踪</li>
+</ul>
+<h2 id="手势操作"><a href="#手势操作" class="headerlink" title="手势操作"></a>手势操作</h2><table>
+<thead>
+<tr>
+<th>手势</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>✊ 握拳</td>
+<td>聚合圣诞树，粒子向中心收缩</td>
+</tr>
+<tr>
+<td>🖐️ 张手</td>
+<td>释放星云，粒子向外扩散</td>
+</tr>
+<tr>
+<td>👋 挥手</td>
+<td>召唤相册，继续挥手切换照片墙 &#x2F; 环形画廊</td>
+</tr>
+</tbody></table>
+<h2 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h2><p>MediaPipe 返回 21 个手部关键点的 3D 坐标，通过计算手指关节角度来判断手势状态。握拳时所有手指弯曲，张手时手指伸展，挥手通过手腕的水平位移速度检测。</p>
+<p>粒子系统使用 Three.js 的 BufferGeometry + ShaderMaterial，每帧更新粒子位置实现聚合&#x2F;扩散动画。</p>
+<p>欢迎去 <a href="/game/christmas-tree.html">游戏页面</a> 体验～</p>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/Three-js/" style="color: #ff7d73">Three.js</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/MediaPipe/" style="color: #ffa2c4">MediaPipe</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB/" style="color: #00a596">手势识别</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%89%8D%E7%AB%AF/" style="color: #ffa2c4">前端</a>
+        </span>
+        
+    </div>
+    <a href="/2026/06/14/gesture-game/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2026/06/13/hello-world/">
+        <h2 class="post-title">关于我的小小博客</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E5%BB%BA%E7%AB%99/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                建站
+            </a>
+        </span>
         
         <span class="date">
             <span class="icon">
@@ -242,29 +342,116 @@
     <div class="description">
         <div class="content" v-pre>
             
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+            <p>欢迎来到我的小站！这里是 lgb 的个人博客。</p>
+<h2 id="关于本站"><a href="#关于本站" class="headerlink" title="关于本站"></a>关于本站</h2><p>本站基于 <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 驱动，使用 <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX</a> 主题，部署在 GitHub Pages 上。</p>
+<h2 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h2><p>热爱技术，喜欢探索有趣的东西。平时会写写 CTF、玩玩前端、折腾各种小项目。</p>
+<p>游戏页面有个基于 Three.js + MediaPipe Hands 的手势识别圣诞树，欢迎去玩玩～</p>
 
             
         </div>
     </div>
     <div class="post-tags">
         
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
         
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/Hexo/" style="color: #00bcd4">Hexo</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/GitHub-Pages/" style="color: #ffa2c4">GitHub Pages</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="color: #03a9f4">博客</a>
+        </span>
         
     </div>
     <a href="/2026/06/13/hello-world/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
+    <a href="/2026/06/12/hexo-blog-guide/">
+        <h2 class="post-title">Hexo 博客搭建指南</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/%E5%BB%BA%E7%AB%99/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                建站
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/6/12
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <p>记录一下用 Hexo + GitHub Pages 搭建个人博客的过程。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 Node.js (推荐 LTS 版本)</span></span><br><span class="line"><span class="comment"># 安装 Git</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 全局安装 Hexo CLI</span></span><br><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<h2 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init my-blog</span><br><span class="line"><span class="built_in">cd</span> my-blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<h2 id="选择主题"><a href="#选择主题" class="headerlink" title="选择主题"></a>选择主题</h2><p>我用的是 <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX</a> 主题：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/theme-particlex/hexo-theme-particlex themes/particlex</span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>_config.yml</code> 中设置 <code>theme: particlex</code>。</p>
+<h2 id="部署到-GitHub-Pages"><a href="#部署到-GitHub-Pages" class="headerlink" title="部署到 GitHub Pages"></a>部署到 GitHub Pages</h2><p>安装部署插件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>配置 <code>_config.yml</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/用户名/用户名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
+
+<p>然后一键部署：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo generate &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>几分钟后就能在 <code>https://用户名.github.io</code> 访问了。</p>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/Hexo/" style="color: #00a596">Hexo</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/GitHub-Pages/" style="color: #03a9f4">GitHub Pages</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/%E6%95%99%E7%A8%8B/" style="color: #00bcd4">教程</a>
+        </span>
+        
+    </div>
+    <a href="/2026/06/12/hexo-blog-guide/" class="go-post">阅读全文</a>
 </div>
 
 
