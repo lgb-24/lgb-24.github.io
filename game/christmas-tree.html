@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magic Christmas Tree - Strict Sequence Edition</title>
+    <title>Magic Christmas Tree - Carousel Edition</title>
     <style>
         body { 
             margin: 0; overflow: hidden; background-color: #000; 
@@ -54,35 +54,27 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.6); opacity: 0;
         }
 
-        /* --- 多维阵列环廊 --- */
+        /* 环形画廊 CSS3D */
         #ring-scene {
-            display: none; width: 85vw; height: 80vh; 
-            position: absolute; top: 10vh; left: 7.5vw;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 20px;
-            perspective: 2000px; z-index: 6;
+            display: none; width: 100%; height: 100%; perspective: 1200px;
+            position: absolute; top: 0; left: 0;
+            justify-content: center; align-items: center; overflow: hidden;
         }
-        
-        .ring-cell {
-            width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
-            perspective: 800px;
-        }
-        .ring-tilt {
-            width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
+        #ring-view {
+            /* 加大了这里的宽高 */
+            width: 500px; height: 350px; position: relative;
             transform-style: preserve-3d;
+            animation: rotateRing 25s linear infinite;
         }
-        .ring-wrapper {
-            width: 120px; height: 80px; position: relative; transform-style: preserve-3d;
+        @keyframes rotateRing {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
         }
-        
-        @keyframes spinRingNormal { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-        @keyframes spinRingReverse { from { transform: rotateY(360deg); } to { transform: rotateY(0deg); } }
-        
         .ring-img {
             position: absolute; width: 100%; height: 100%; object-fit: cover;
-            border: 2px solid rgba(255, 215, 0, 0.7); border-radius: 6px;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); backface-visibility: visible;
+            border: 3px solid #ffd700; border-radius: 12px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            /* Transform 会在 JS 中动态计算半径并赋予 */
         }
 
         /* 状态控制 */
@@ -92,16 +84,17 @@
         .show-wall #html-overlay { opacity: 1; pointer-events: auto; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); }
         .show-wall #wall-view { display: grid; }
         
-        .show-ring #html-overlay { opacity: 1; pointer-events: auto; background: rgba(0, 0, 0, 0.7); }
-        .show-ring #ring-scene { display: grid; }
+        .show-ring #html-overlay { opacity: 1; pointer-events: auto; }
+        .show-ring #ring-scene { display: flex; }
 
         /* --- UI 指示 --- */
         #ui-layer {
             position: absolute; top: 40px; left: 40px; z-index: 10; pointer-events: none;
             color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.9); transition: opacity 0.5s;
         }
+        h1 { font-weight: 200; letter-spacing: 6px; font-size: 1.8rem; margin: 0 0 15px 0; background: linear-gradient(to right, #fff, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .instructions {
-            font-size: 0.85rem; color: #ccc; line-height: 1.8; max-width: 380px;
+            font-size: 0.85rem; color: #ccc; line-height: 1.8; max-width: 350px;
             background: rgba(10, 10, 10, 0.6); padding: 20px; border-radius: 12px;
             border-left: 2px solid #d4af37; backdrop-filter: blur(8px);
         }
@@ -145,17 +138,19 @@
         <div id="html-overlay">
             <img id="single-photo-view" src="" alt="Memory" />
             <div id="wall-view"></div>
-            <div id="ring-scene"></div>
+            <div id="ring-scene">
+                <div id="ring-view"></div>
+            </div>
         </div>
 
         <div id="ui-layer">
-            <div id="status-text"><span class="status-dot" id="status-dot"></span><span id="status-msg">初始化...</span></div>
+            <div id="status-text"><span class="status-dot" id="status-dot"></span><span id="status-msg">等待手势...</span></div>
             <div class="instructions">
-                <b>严格指令流程：</b><br/>
-                &nbsp;1. <span class="highlight">✊ 握拳</span> : 聚合圣诞树<br/>
-                &nbsp;2. <span class="highlight">🖐️ 张手</span> : 释放成星云<br/>
-                &nbsp;3. <span class="highlight">👋 挥手</span> : 单向展示照片 (到底为止)<br/>
-                &nbsp;4. <span class="highlight">✊ 握拳</span> : 重置循环 (仅在画廊时有效)
+                • <span class="highlight">✊ 握拳</span> : 返回/聚成圣诞树<br/>
+                • <span class="highlight">🖐️ 张手</span> : 释放成星云<br/>
+                • <span class="highlight">👋 大幅挥手</span> : 召唤相册 <br/>
+                • <span class="highlight">👋 轻微晃动</span> : (在相册内) 切换 / 照片墙 / 幻影画廊<br/>
+                <span style="font-size: 0.75rem; color:#888; margin-top:8px; display:block;">注: 进入相册后，只能通过握拳退出</span>
             </div>
             <button id="upload-btn" onclick="document.getElementById('file-input').click()">+ 上传相册 (可多选)</button>
             <input type="file" id="file-input" multiple accept="image/*">
@@ -175,13 +170,9 @@
             treeHeight: 75, maxRadius: 30, camDistance: 110,
             bloomStrength: 0.7, bloomThreshold: 0.35, bloomRadius: 0.6
         };
-        
-        // 视觉状态
+        // 新增 RING (环形画廊) 状态
         const STATE = { TREE: 'tree', SCATTER: 'scatter', ZOOM: 'zoom', WALL: 'wall', RING: 'ring' };
-        let currentState = STATE.SCATTER; // 初始为星云发散
-        
-        // 严格流程控制器: 0=等握拳, 1=等张手, 2=等挥手, 3=照片单向展示
-        let seqStep = 0; 
+        let currentState = STATE.SCATTER; 
         
         let scene, camera, renderer, composer, mainGroup = new THREE.Group();
         let goldMesh, silverMesh, gemMesh, emeraldMesh, dustSystem;
@@ -232,7 +223,6 @@
             const gemMat = new THREE.MeshPhysicalMaterial({ color: 0xff0044, metalness: 0.1, roughness: 0.0, transmission: 0.6, thickness: 1.5, emissive: 0x550011, emissiveIntensity: 0.4 });
             const emeraldMat = new THREE.MeshPhysicalMaterial({ color: 0x00aa55, metalness: 0.2, roughness: 0.1, transmission: 0.5, thickness: 1.5, emissive: 0x002211, emissiveIntensity: 0.3 });
 
-            // 初始状态生成在 scatterPos (星云)
             goldMesh = createInstancedMesh(new THREE.SphereGeometry(0.7, 12, 12), goldMat, CONFIG.goldCount, logicData.gold);
             silverMesh = createInstancedMesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), silverMat, CONFIG.silverCount, logicData.silver);
             gemMesh = createInstancedMesh(new THREE.OctahedronGeometry(0.8, 0), gemMat, CONFIG.gemCount, logicData.gem);
@@ -242,7 +232,7 @@
             const starMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness:0.8, roughness:0, emissive:0xffffee, emissiveIntensity:1.5 });
             const star = new THREE.Mesh(starGeo, starMat);
             star.userData = { treePos: new THREE.Vector3(0, CONFIG.treeHeight/2 + 2.5, 0), scatterPos: new THREE.Vector3(0, 60, 0) };
-            star.position.copy(star.userData.scatterPos); mainGroup.add(star); logicData.star = star;
+            star.position.copy(star.userData.treePos); mainGroup.add(star); logicData.star = star;
         }
 
         function createInstancedMesh(geo, mat, count, dataArray) {
@@ -253,8 +243,7 @@
                 const rMax = CONFIG.maxRadius * (1 - normH) * 1.1; const r = Math.sqrt(Math.random()) * rMax; const theta = Math.random() * Math.PI * 2;
                 const treePos = new THREE.Vector3(r * Math.cos(theta), h, r * Math.sin(theta));
                 const scatterPos = randomSpherePoint(40 + Math.random()*50);
-                // currentPos 初始直接设定为散开状态
-                dataArray.push({ treePos: treePos, scatterPos: scatterPos, currentPos: scatterPos.clone(), scale: 0.5 + Math.random() * 0.9, rotSpeed: new THREE.Euler(Math.random()*0.02, Math.random()*0.02, 0), rotation: new THREE.Euler(Math.random()*Math.PI, Math.random()*Math.PI, 0) });
+                dataArray.push({ treePos: treePos, scatterPos: scatterPos, currentPos: treePos.clone(), scale: 0.5 + Math.random() * 0.9, rotSpeed: new THREE.Euler(Math.random()*0.02, Math.random()*0.02, 0), rotation: new THREE.Euler(Math.random()*Math.PI, Math.random()*Math.PI, 0) });
             }
             return mesh;
         }
@@ -269,10 +258,8 @@
             for(let i=0; i<CONFIG.dustCount; i++) {
                 const h = Math.random() * CONFIG.treeHeight - CONFIG.treeHeight/2;
                 const r = Math.random() * CONFIG.maxRadius + 5; const theta = Math.random() * Math.PI * 2;
-                const x = r*Math.cos(theta), z = r*Math.sin(theta);
-                const scatterPos = randomSpherePoint(70);
-                pos[i*3] = scatterPos.x; pos[i*3+1] = scatterPos.y; pos[i*3+2] = scatterPos.z;
-                logicData.dust.push({ treePos: new THREE.Vector3(x, h, z), scatterPos: scatterPos, currentPos: scatterPos.clone(), velocity: Math.random() * 0.05 + 0.02 });
+                const x = r*Math.cos(theta), z = r*Math.sin(theta); pos[i*3] = x; pos[i*3+1] = h; pos[i*3+2] = z;
+                logicData.dust.push({ treePos: new THREE.Vector3(x, h, z), scatterPos: randomSpherePoint(70), currentPos: new THREE.Vector3(x, h, z), velocity: Math.random() * 0.05 + 0.02 });
             }
             geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
             const mat = new THREE.PointsMaterial({ color: 0xffd700, size: 0.5, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending, depthWrite: false });
@@ -294,16 +281,14 @@
             frame.position.z = -0.06; mesh.add(frame);
             const h_pos = (Math.random() - 0.5) * CONFIG.treeHeight; const normH = (h_pos + CONFIG.treeHeight/2) / CONFIG.treeHeight;
             const r = (CONFIG.maxRadius * (1 - normH) + 2) * (0.6 + 0.4 * Math.random()); const theta = Math.random() * Math.PI * 2;
-            const scatterPos = randomSpherePoint(60);
-            mesh.userData = { treePos: new THREE.Vector3(r * Math.cos(theta), h_pos, r * Math.sin(theta)), scatterPos: scatterPos, baseRot: new THREE.Euler(0, theta + Math.PI/2, 0) };
-            mesh.position.copy(scatterPos); mesh.lookAt(camera.position); 
+            mesh.userData = { treePos: new THREE.Vector3(r * Math.cos(theta), h_pos, r * Math.sin(theta)), scatterPos: randomSpherePoint(60), baseRot: new THREE.Euler(0, theta + Math.PI/2, 0) };
+            mesh.position.copy(mesh.userData.treePos); mesh.lookAt(new THREE.Vector3(0, h_pos, 0)); 
             photoMeshes.push(mesh); mainGroup.add(mesh);
         }
 
         function animate() {
             requestAnimationFrame(animate); time += 0.01;
-            const isTree = (currentState === STATE.TREE);
-            
+            const isTree = currentState === STATE.TREE;
             updateMeshLogic(goldMesh, logicData.gold, isTree); updateMeshLogic(silverMesh, logicData.silver, isTree);
             updateMeshLogic(gemMesh, logicData.gem, isTree); updateMeshLogic(emeraldMesh, logicData.emerald, isTree);
             updateDustLogic(isTree); updatePhotoLogic(isTree);
@@ -370,8 +355,7 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 video.srcObject = stream;
                 video.addEventListener("loadeddata", () => {
-                    document.getElementById('loading-screen').style.display = 'none'; 
-                    updateStatus("等待第1指令：请握拳 (✊) 聚合", "#ff0044");
+                    document.getElementById('loading-screen').style.display = 'none'; updateStatus("AI 视觉已连接", "#00ff88");
                     processVideo(landmarker, video);
                 });
             } catch (error) {
@@ -407,21 +391,20 @@
             for(let p of marks) { ctx.beginPath(); ctx.arc(p.x * w, p.y * h, 3, 0, 2 * Math.PI); ctx.fill(); }
         }
 
-        // --- 核心逻辑：严格线性状态机 ---
+        // --- 核心手势逻辑 (防误触 + 环形锁定) ---
         function analyzeGesture(marks) {
             const palmX = 1 - marks[9].x; const palmY = marks[9].y; 
             handPos.x = handPos.x * 0.7 + palmX * 0.3; handPos.y = handPos.y * 0.7 + palmY * 0.3;
 
-            // 判断手势：握拳 (指尖收回) vs 张开 (指尖伸出)
+            // 1. 判断握拳
             let folded = 0;
             [8,12,16,20].forEach(tip => {
                 let d = Math.sqrt((marks[tip].x - marks[0].x)**2 + (marks[tip].y - marks[0].y)**2);
                 if(d < 0.25) folded++;
             });
             const isFist = folded >= 3;
-            const isOpen = folded <= 1; // 至少伸直3根手指视为张开
 
-            // 侦测动作幅度 (挥手)
+            // 2. 侦测动作幅度
             const deltaX = handPos.x - lastHandPos.x;
             const deltaY = handPos.y - lastHandPos.y;
             let palmSpeed = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
@@ -439,70 +422,48 @@
             const now = performance.now();
             const canWave = (now - lastWaveTime) > 600; 
 
-            // ================= 严格步骤控制 =================
-            
-            if (seqStep === 0) {
-                // 【阶段 0】：星云初始状态。唯一有效指令：握拳
-                if (isFist) {
-                    seqStep = 1;
+            // ---------------- 状态机 ----------------
+            if (isFist) {
+                // 只有握拳，可以从任何状态强行回到【圣诞树】
+                if (currentState !== STATE.TREE) {
                     currentState = STATE.TREE;
-                    updateStatus("✊ 已聚合 (等待第2指令：🖐️ 张开发散)", "#0f0");
-                } else {
-                    updateStatus("等待第1指令：请握拳 (✊) 聚合", "#ff0044");
+                    updateHTMLOverlay();
                 }
-            } 
-            else if (seqStep === 1) {
-                // 【阶段 1】：树状态。唯一有效指令：张手
-                if (isOpen && !isFist) {
-                    seqStep = 2;
+                updateStatus("✊ 聚合圣诞树", "#0f0");
+            } else {
+                if (currentState === STATE.TREE) {
                     currentState = STATE.SCATTER; 
-                    updateStatus("🖐️ 已发散 (等待第3指令：👋 挥手看照片)", "#00aaff");
-                } else {
-                    updateStatus("等待第2指令：请张开手掌 (🖐️) 发散", "#0f0");
-                }
-            }
-            else if (seqStep === 2) {
-                // 【阶段 2】：星云待命状态。唯一有效指令：挥手
-                if (canWave && totalMovement > 0.15) { 
-                    seqStep = 3;
-                    triggerPhotoFlow();
-                    lastWaveTime = now;
-                } else {
-                    updateStatus("等待第3指令：请挥手 (👋) 展示照片", "#00aaff");
-                }
-            }
-            else if (seqStep === 3) {
-                // 【阶段 3】：照片展示流程。不可逆向回到树/星云，只能往下，直到重置
-                if (currentState === STATE.ZOOM) {
-                    // 还在看单张，只能继续挥手
-                    if (canWave && totalMovement > 0.1) { 
+                    updateStatus("🖐️ 星云发散", "#00aaff");
+                } 
+                else if (currentState === STATE.SCATTER) {
+                    // 【Bug修复】：大幅度提高进入照片的阈值，防误触。静止或轻微晃动保持在星云。
+                    if (canWave && totalMovement > 0.12) { 
                         triggerPhotoFlow();
                         lastWaveTime = now;
                     } else {
-                        updateStatus(`📸 照片 (${zoomTargetIndex + 1}/${photoUrls.length}) - 只能挥手往下`, "#ffd700");
+                        updateStatus("🖐️ 星云模式 (需大幅挥手进入相册)", "#00aaff");
                     }
                 } 
-                else if (currentState === STATE.WALL || currentState === STATE.RING) {
-                    // 到了墙/环廊，挥手可进下一步，但此时【握拳】可以重置循环
-                    if (canWave && totalMovement > 0.1 && currentState === STATE.WALL) {
+                else if (currentState === STATE.ZOOM || currentState === STATE.WALL) {
+                    // 进入相册后，保持低阈值，方便轻松翻页
+                    if (canWave && totalMovement > 0.04) { 
                         triggerPhotoFlow();
                         lastWaveTime = now;
-                    } else if (isFist) {
-                        // 触发循环指令重置
-                        seqStep = 1;
-                        currentState = STATE.TREE;
-                        updateStatus("✊ 循环重置：已聚合 (等待 🖐️ 张手)", "#0f0");
-                        updateHTMLOverlay(); // 隐藏 HTML 照片层
                     } else {
-                        let msg = currentState === STATE.WALL ? "🌠 照片墙 - 挥手进环廊，或握拳重置循环" : "🪐 多维阵列环廊 - 握拳重置循环";
-                        updateStatus(msg, "#aa00ff");
+                        let msg = currentState === STATE.ZOOM ? `📸 照片 (${zoomTargetIndex + 1}/${photoUrls.length}) - 动动手继续` : "🌠 照片墙 - 动动手开启环形画廊";
+                        updateStatus(msg, "#ffd700");
                     }
+                }
+                else if (currentState === STATE.RING) {
+                    // 环形画廊状态，此时任何晃动都不会再切照片，只能欣赏。唯一退出方式是握拳。
+                    updateStatus("🪐 环形幻影画廊 - (握拳返回树)", "#aa00ff");
                 }
             }
 
             lastHandPos.x = handPos.x; lastHandPos.y = handPos.y;
         }
 
+        // --- 新增：触发流程中剥离了返回 Zoom，改为进入 Ring ---
         function triggerPhotoFlow() {
             if (photoUrls.length === 0) { updateStatus("需要先上传照片", "#ff8800"); return; }
 
@@ -514,8 +475,10 @@
                     currentState = STATE.WALL; renderMeteorWall();
                 }
             } else if (currentState === STATE.WALL) {
-                currentState = STATE.RING; renderMultiRingView();
+                // 照片墙之后，进入环形画廊
+                currentState = STATE.RING; renderRingView();
             } 
+            // 注意：如果在 RING 状态下触发 triggerPhotoFlow，这里不做任何处理，维持现状
             updateHTMLOverlay();
         }
 
@@ -542,60 +505,25 @@
             });
         }
 
-        // --- 多维阵列环廊 ---
-        function renderMultiRingView() {
-            const ringScene = document.getElementById('ring-scene');
-            ringScene.innerHTML = '';
+        // --- 新增：渲染 CSS 3D 环形走马灯 ---
+        function renderRingView() {
+            const ring = document.getElementById('ring-view');
+            ring.innerHTML = '';
+            const numPhotos = photoUrls.length;
             
-            const tilts = [
-                'rotateX(-15deg)',                       // 横环 
-                'rotateZ(90deg) rotateX(-15deg)',        // 竖环
-                'rotateZ(45deg) rotateX(-15deg)',        // 左斜环
-                'rotateZ(-45deg) rotateX(-15deg)'        // 右斜环
-            ];
-            
-            const pattern = [
-                0, 1, 2, 3, 
-                3, 0, 1, 2, 
-                2, 3, 0, 1  
-            ];
-            
-            let photoIndex = 0;
-            const photosPerRing = Math.max(5, Math.ceil(photoUrls.length / 12));
-            const imgWidth = 120; 
-            const radius = Math.max(130, (photosPerRing * (imgWidth + 10)) / (2 * Math.PI)); 
+            // 动态计算环的半径，为了适配放大的照片，加大了这里的基础参数
+            const itemWidth = 500; 
+            const radius = Math.max(450, (numPhotos * itemWidth * 1.3) / (2 * Math.PI)); 
 
-            for (let i = 0; i < 12; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'ring-cell';
-                
-                const tilt = document.createElement('div');
-                tilt.className = 'ring-tilt';
-                tilt.style.transform = tilts[pattern[i]];
-                
-                const wrapper = document.createElement('div');
-                wrapper.className = 'ring-wrapper';
-                
-                const speed = 18 + Math.random() * 8;
-                const animName = Math.random() > 0.5 ? 'spinRingNormal' : 'spinRingReverse';
-                wrapper.style.animation = `${animName} ${speed}s linear infinite`;
-
-                for (let j = 0; j < photosPerRing; j++) {
-                    const img = document.createElement('img');
-                    img.src = photoUrls[photoIndex % photoUrls.length];
-                    img.className = 'ring-img';
-                    
-                    const angle = (360 / photosPerRing) * j;
-                    img.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
-                    
-                    wrapper.appendChild(img);
-                    photoIndex++;
-                }
-
-                tilt.appendChild(wrapper);
-                cell.appendChild(tilt);
-                ringScene.appendChild(cell);
-            }
+            photoUrls.forEach((url, i) => {
+                let img = document.createElement('img');
+                img.src = url;
+                img.className = 'ring-img';
+                let angle = (360 / numPhotos) * i;
+                // 围绕 Y 轴旋转并向外推开
+                img.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+                ring.appendChild(img);
+            });
         }
 
         function updateStatus(msg, color) {
@@ -612,11 +540,7 @@
                 };
                 reader.readAsDataURL(file);
             });
-            // 提醒上传完后该做什么指令
-            setTimeout(() => {
-                let msg = seqStep === 0 ? "已加载，请握拳 (✊)" : (seqStep===1 ? "已加载，请张手 (🖐️)" : "已加载，请挥手 (👋)");
-                updateStatus(msg, "#fff");
-            }, 500);
+            setTimeout(() => updateStatus(`已加载 ${photoUrls.length} 张图片`, "#fff"), 500);
         });
 
         initThree(); initAI(); animate();
