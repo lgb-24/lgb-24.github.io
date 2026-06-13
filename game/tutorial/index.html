@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title>游戏 | lgb的小站</title>
+    <title>游戏教程 | lgb的小站</title>
     <meta name="author" content="lgb" />
     <meta name="description" content="当我猜到谜底，才发现 一切都已过去，岁月已换了谜底 ——席慕容《谜题》" />
     <meta name="keywords" content="" />
@@ -184,7 +184,7 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>游戏</h1>
+        <h1>游戏教程</h1>
     </div>
     <div class="info">
         <span class="date">
@@ -199,199 +199,192 @@
     
     <div class="content" v-pre>
         <style>
-/* ===== Game Hub 炫酷样式 ===== */
-.game-hub { max-width: 900px; margin: 0 auto; }
+/* ===== Tutorial Page 炫酷样式 ===== */
+.tutorial-wrap { max-width: 800px; margin: 0 auto; }
+
+/* Back link */
+.back-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; margin-bottom: 24px;
+  border-radius: 99px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.04);
+  color: #6366f1; font-weight: 700; font-size: 13px;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.back-link:hover { transform: translateY(-2px); border-color: rgba(99, 102, 241, 0.4); background: rgba(99, 102, 241, 0.08); }
 
 /* Hero */
-.game-hero {
-  position: relative;
-  padding: 40px 36px;
-  margin-bottom: 36px;
+.tutorial-hero {
+  position: relative; padding: 36px 32px; margin-bottom: 32px;
   border-radius: 20px;
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.06));
   border: 1px solid rgba(99, 102, 241, 0.15);
   overflow: hidden;
 }
-.game-hero::before {
-  content: "";
-  position: absolute;
+.tutorial-hero::before {
+  content: ""; position: absolute;
   top: -50%; right: -10%;
-  width: 300px; height: 300px;
-  border-radius: 50%;
+  width: 260px; height: 260px; border-radius: 50%;
   background: radial-gradient(circle, rgba(99, 102, 241, 0.1), transparent 70%);
   pointer-events: none;
 }
-.game-hero::after {
-  content: "";
-  position: absolute;
-  bottom: -40%; left: 20%;
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.08), transparent 70%);
-  pointer-events: none;
-}
-.game-hero-inner { position: relative; z-index: 1; }
-.game-hero-kicker {
+.tutorial-hero-inner { position: relative; z-index: 1; }
+.tutorial-kicker {
   display: inline-flex; align-items: center; gap: 8px;
-  margin-bottom: 12px;
-  font-size: 12px; font-weight: 800; letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #6366f1;
+  margin-bottom: 10px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.15em;
+  text-transform: uppercase; color: #6366f1;
 }
-.game-hero-kicker::before {
-  content: ""; width: 18px; height: 2px; border-radius: 99px;
-  background: linear-gradient(90deg, #6366f1, #a855f7);
-}
-.game-hero-title {
-  margin: 0 0 10px;
-  font-size: clamp(28px, 5vw, 48px); font-weight: 900;
+.tutorial-kicker::before { content: ""; width: 16px; height: 2px; border-radius: 99px; background: linear-gradient(90deg, #6366f1, #a855f7); }
+.tutorial-hero h1 {
+  margin: 0 0 8px;
+  font-size: clamp(28px, 5vw, 44px); font-weight: 900;
   background: linear-gradient(135deg, #6366f1 0%, #a855f7 40%, #ec4899 100%);
   background-size: 200% 100%;
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: game-shimmer 4s ease-in-out infinite;
+  animation: tut-shimmer 5s ease-in-out infinite;
 }
-@keyframes game-shimmer {
+@keyframes tut-shimmer {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
-.game-hero-desc {
-  margin: 0; font-size: 15px; line-height: 1.8;
-  color: var(--color-text-secondary, #666);
-}
+.tutorial-hero .lead { margin: 0; font-size: 15px; line-height: 1.8; color: var(--color-text-secondary, #888); }
 
-/* Game Cards Grid */
-.game-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+/* Section Card */
+.section-card {
+  position: relative; margin-bottom: 20px; padding: 24px 28px;
+  border-radius: 16px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(99,102,241,0.03));
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
+.section-card:hover { transform: translateY(-4px); border-color: rgba(99, 102, 241, 0.25); box-shadow: 0 16px 40px rgba(99, 102, 241, 0.06); }
+.section-card h2 { margin: 0 0 12px; font-size: 24px; font-weight: 800; color: #6366f1; }
+.section-card h3 { margin: 20px 0 10px; font-size: 18px; font-weight: 700; }
 
-/* Game Card */
-.game-card {
-  position: relative;
-  display: block;
-  overflow: hidden;
+/* Step */
+.step {
+  margin-top: 16px; padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(99, 102, 241, 0.08);
+  background: rgba(99, 102, 241, 0.03);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.step:hover { border-color: rgba(99, 102, 241, 0.2); background: rgba(99, 102, 241, 0.05); }
+.step p { margin: 0; font-size: 15px; line-height: 1.8; }
+.step strong { color: #6366f1; }
+
+/* Gesture grid */
+.gesture-grid {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-top: 16px;
+}
+.gesture-item {
+  text-align: center; padding: 20px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  background: rgba(99, 102, 241, 0.02);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.gesture-item:hover { transform: translateY(-4px); border-color: rgba(99, 102, 241, 0.3); }
+.gesture-emoji { font-size: 40px; margin-bottom: 8px; display: block; }
+.gesture-name { font-weight: 800; font-size: 15px; margin-bottom: 4px; }
+.gesture-desc { font-size: 12px; color: var(--color-text-secondary, #888); line-height: 1.6; }
+
+/* Ending */
+.ending {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 20px 28px;
   border-radius: 16px;
   border: 1px solid rgba(99, 102, 241, 0.12);
-  background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(99,102,241,0.04));
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease, border-color 0.3s ease;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.04), rgba(168, 85, 247, 0.02));
 }
-.game-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(99, 102, 241, 0.35);
-  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.1), 0 0 30px rgba(168, 85, 247, 0.06);
-}
-.game-card::before {
-  content: "";
-  position: absolute; inset: 0; z-index: 0;
-  opacity: 0; transition: opacity 0.3s ease;
-  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.06), transparent 60%);
-  pointer-events: none;
-}
-.game-card:hover::before { opacity: 1; }
-
-.game-card-badge {
-  position: absolute; top: 12px; left: 12px; z-index: 2;
-  padding: 4px 10px; border-radius: 99px;
-  font-size: 10px; font-weight: 900; letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.game-card-badge.guide { background: rgba(99,102,241,0.15); color: #6366f1; }
-.game-card-badge.game { background: rgba(168,85,247,0.15); color: #a855f7; }
-.game-card-badge.active { background: rgba(34,197,94,0.15); color: #22c55e; }
-
-.game-card-media {
-  position: relative; height: 160px; overflow: hidden;
-  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.04));
-  display: flex; align-items: center; justify-content: center;
-}
-.game-card-icon {
-  font-size: 56px; opacity: 0.8;
-  transition: transform 0.4s ease;
-}
-.game-card:hover .game-card-icon { transform: scale(1.15); }
-.game-card-media::after {
-  content: "";
-  position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(to top, rgba(0,0,0,0.1) 0%, transparent 50%);
-}
-.game-card-info { position: relative; z-index: 1; padding: 18px 20px 22px; }
-.game-card-info h3 { margin: 0 0 6px; font-size: 22px; font-weight: 800; }
-.game-card-info p { margin: 0 0 14px; font-size: 13px; line-height: 1.7; color: var(--color-text-secondary, #888); }
-.game-card-action {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #6366f1;
-  transition: gap 0.2s ease, color 0.2s ease;
-}
-.game-card:hover .game-card-action { gap: 10px; color: #a855f7; }
-
-/* Floating decoration dots */
-.game-dots { position: relative; pointer-events: none; }
-.game-dot {
-  position: absolute; border-radius: 50%;
-  animation: float-dot 3s ease-in-out infinite;
-}
-.game-dot:nth-child(1) { width: 6px; height: 6px; top: 30px; right: 40px; background: #6366f1; animation-delay: 0s; }
-.game-dot:nth-child(2) { width: 4px; height: 4px; top: 60px; right: 100px; background: #a855f7; animation-delay: 0.8s; }
-.game-dot:nth-child(3) { width: 8px; height: 8px; top: 20px; right: 180px; background: #ec4899; animation-delay: 1.6s; }
-@keyframes float-dot {
-  0%, 100% { transform: translateY(0); opacity: 0.5; }
-  50% { transform: translateY(-12px); opacity: 1; }
+.ending p { margin: 0; font-size: 15px; }
+.badge {
+  flex-shrink: 0; padding: 8px 14px; border-radius: 99px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.08);
+  font-size: 12px; font-weight: 800; color: #6366f1;
 }
 
-/* Responsive */
 @media (max-width: 640px) {
-  .game-hero { padding: 28px 20px; }
-  .game-grid { grid-template-columns: 1fr; }
+  .tutorial-hero { padding: 24px 20px; }
+  .section-card { padding: 18px 16px; }
+  .gesture-grid { grid-template-columns: 1fr 1fr; }
+  .ending { flex-direction: column; align-items: flex-start; }
 }
 </style>
 
-<div class="game-hub">
-  <div class="game-dots">
-    <span class="game-dot"></span>
-    <span class="game-dot"></span>
-    <span class="game-dot"></span>
-  </div>
+<div class="tutorial-wrap">
+  <a class="back-link" href="/game/">← 返回游戏选择页</a>
 
-  <section class="game-hero">
-    <div class="game-hero-inner">
-      <div class="game-hero-kicker">Motion Lab</div>
-      <h1 class="game-hero-title">游戏选择页 ψ(｀∇´)ψ</h1>
-      <p class="game-hero-desc">基于 Three.js + MediaPipe Hands 的交互体验。打开摄像头，用手势来玩游戏吧～</p>
+  <section class="tutorial-hero">
+    <div class="tutorial-hero-inner">
+      <div class="tutorial-kicker">Game Guide</div>
+      <h1>游戏の教程</h1>
+      <p class="lead">这里介绍 Magic Christmas Tree 的手势操作方法，看完就能上手玩啦～</p>
     </div>
   </section>
 
-  <section class="game-grid">
-    <!-- Tutorial Card -->
-    <a class="game-card" href="/game/tutorial/">
-      <div class="game-card-media">
-        <span class="game-card-badge guide">Guide</span>
-        <span class="game-card-icon">📖</span>
-      </div>
-      <div class="game-card-info">
-        <h3>游戏教程 (✪ω✪)</h3>
-        <p>第一次玩？来这里看看手势操作指南，快速上手魔法圣诞树～</p>
-        <span class="game-card-action">Open Guide →</span>
-      </div>
-    </a>
+  <section>
+    <article class="section-card">
+      <h2>Magic Christmas Tree</h2>
+      <p>基于 Three.js + MediaPipe Hands 手势识别的魔法圣诞树。打开摄像头后，用下面的手势来控制效果。</p>
 
-<pre><code>&lt;!-- Christmas Tree Game Card --&gt;
-&lt;a class=&quot;game-card&quot; href=&quot;/game/christmas-tree.html&quot;&gt;
-  &lt;div class=&quot;game-card-media&quot;&gt;
-    &lt;span class=&quot;game-card-badge active&quot;&gt;Play&lt;/span&gt;
-    &lt;span class=&quot;game-card-icon&quot;&gt;🎄&lt;/span&gt;
+<pre><code>  &lt;h3&gt;基本手势&lt;/h3&gt;
+  &lt;div class=&quot;gesture-grid&quot;&gt;
+    &lt;div class=&quot;gesture-item&quot;&gt;
+      &lt;span class=&quot;gesture-emoji&quot;&gt;✊&lt;/span&gt;
+      &lt;div class=&quot;gesture-name&quot;&gt;握拳&lt;/div&gt;
+      &lt;div class=&quot;gesture-desc&quot;&gt;聚合圣诞树，粒子向中心收缩&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;gesture-item&quot;&gt;
+      &lt;span class=&quot;gesture-emoji&quot;&gt;🖐️&lt;/span&gt;
+      &lt;div class=&quot;gesture-name&quot;&gt;张手&lt;/div&gt;
+      &lt;div class=&quot;gesture-desc&quot;&gt;释放星云，粒子向外扩散&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;gesture-item&quot;&gt;
+      &lt;span class=&quot;gesture-emoji&quot;&gt;👋&lt;/span&gt;
+      &lt;div class=&quot;gesture-name&quot;&gt;挥手&lt;/div&gt;
+      &lt;div class=&quot;gesture-desc&quot;&gt;召唤相册，继续挥手切换照片墙和环形画廊&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;gesture-item&quot;&gt;
+      &lt;span class=&quot;gesture-emoji&quot;&gt;📤&lt;/span&gt;
+      &lt;div class=&quot;gesture-name&quot;&gt;上传照片&lt;/div&gt;
+      &lt;div class=&quot;gesture-desc&quot;&gt;支持上传自定义相册照片&lt;/div&gt;
+    &lt;/div&gt;
   &lt;/div&gt;
-  &lt;div class=&quot;game-card-info&quot;&gt;
-    &lt;h3&gt;Magic Christmas Tree&lt;/h3&gt;
-    &lt;p&gt;手势识别魔法圣诞树：握拳聚合、张手释放星云、挥手召唤相册，支持上传自定义照片。&lt;/p&gt;
-    &lt;span class=&quot;game-card-action&quot;&gt;Click To Enter →&lt;/span&gt;
+
+  &lt;h3&gt;操作步骤&lt;/h3&gt;
+
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Step 1&lt;/strong&gt; — 点击 &lt;a href=&quot;/game/christmas-tree.html&quot;&gt;进入游戏&lt;/a&gt;，浏览器会请求摄像头权限，点击允许。&lt;/p&gt;
   &lt;/div&gt;
-&lt;/a&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Step 2&lt;/strong&gt; — 将手掌正对摄像头，确保光线充足、手部清晰可见。&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Step 3&lt;/strong&gt; — &lt;strong&gt;🖐️ 张手&lt;/strong&gt;：五指张开，圣诞树粒子会向外扩散形成星云效果。&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Step 4&lt;/strong&gt; — &lt;strong&gt;✊ 握拳&lt;/strong&gt;：握紧拳头，粒子会向中心聚合成圣诞树形状。&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Step 5&lt;/strong&gt; — &lt;strong&gt;👋 挥手&lt;/strong&gt;：左右挥手召唤相册，继续挥手可以在照片墙和环形画廊之间切换。&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;step&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Step 6&lt;/strong&gt; — 点击页面上的上传按钮可以添加自己的照片到相册中。&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/article&gt;
+
+&lt;article class=&quot;section-card ending&quot;&gt;
+  &lt;p&gt;教程到此 &lt;strong&gt;结束啦&lt;/strong&gt;～ 快去&lt;a href=&quot;/game/christmas-tree.html&quot;&gt;玩游戏&lt;/a&gt;吧，٩( &#39;ω&#39; )و ！&lt;/p&gt;
+  &lt;span class=&quot;badge&quot;&gt;Have Fun&lt;/span&gt;
+&lt;/article&gt;
 </code></pre>
   </section>
 </div>
