@@ -1,284 +1,288 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>game！</title>
-    <link rel="icon" href="/images/favicon.ico" />
-    <style>
-        * { box-sizing: border-box; }
+    <meta charset="utf-8" />
+    <title>游戏 | lgb的小站</title>
+    <meta name="author" content="lgb" />
+    <meta name="description" content="当我猜到谜底，才发现 一切都已过去，岁月已换了谜底 ——席慕容《谜题》" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
 
-        :root {
-            --game-accent: #b8e8ff;
-            --game-warm: #ffd499;
-            --game-glass: rgba(255, 255, 255, 0.05);
-            --game-glass-border: rgba(255, 255, 255, 0.1);
-            --game-glass-hover: rgba(255, 255, 255, 0.12);
-            --game-radius: 20px;
-        }
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-            color: rgba(247, 252, 255, 0.92);
-            background:
-                url('/images/game-bg.jpg') center/cover no-repeat fixed;
-            overflow-x: hidden;
-            position: relative;
-        }
 
-        body::before {
-            content: "";
-            position: fixed; inset: 0; z-index: 0; pointer-events: none;
-            background:
-                linear-gradient(120deg, rgba(2, 6, 16, 0.65), rgba(5, 12, 26, 0.4) 42%, rgba(3, 8, 18, 0.6)),
-                radial-gradient(circle at 50% 0, rgba(141, 233, 255, 0.12), transparent 42%);
-        }
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
 
-        .game-shell {
-            position: relative; z-index: 1;
-            margin: 0 auto; max-width: 1000px; padding: 28px 28px 64px;
-        }
 
-        .game-topbar {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 48px; gap: 20px;
-        }
-        .game-topbar-brand {
-            display: inline-flex; align-items: center; gap: 10px;
-            text-decoration: none; color: rgba(247, 252, 255, 0.95);
-            font-size: 17px; font-weight: 900; letter-spacing: 0.05em;
-            text-transform: uppercase;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-            transition: transform 0.2s ease;
-        }
-        .game-topbar-brand:hover { transform: translateY(-1px); }
-        .game-topbar-brand .brand-dot {
-            width: 10px; height: 10px; border-radius: 50%;
-            background: linear-gradient(135deg, #70d8ff, #b899ff);
-            box-shadow: 0 0 14px rgba(112, 216, 255, 0.5);
-        }
-        .game-topbar-links {
-            display: flex; align-items: center; gap: 4px;
-            padding: 6px; background: var(--game-glass);
-            border: 1px solid var(--game-glass-border); border-radius: 999px;
-            -webkit-backdrop-filter: blur(16px) saturate(150%);
-            backdrop-filter: blur(16px) saturate(150%);
-        }
-        .game-topbar-links a {
-            position: relative; padding: 8px 14px; border-radius: 999px;
-            font-size: 13px; font-weight: 700; color: rgba(225, 241, 255, 0.78);
-            text-decoration: none; letter-spacing: 0.02em;
-            transition: background 0.2s ease, color 0.2s ease;
-        }
-        .game-topbar-links a:hover { background: var(--game-glass-hover); color: #fff; }
-        .game-topbar-links a.active { background: rgba(255, 255, 255, 0.14); color: #fff; }
 
-        .hero {
-            position: relative; margin-bottom: 40px;
-            padding: clamp(28px, 5vw, 48px); border-radius: 28px;
-            background: var(--game-glass);
-            border: 1px solid var(--game-glass-border);
-            -webkit-backdrop-filter: blur(20px) saturate(140%);
-            backdrop-filter: blur(20px) saturate(140%);
-            overflow: hidden;
-        }
-        .hero::before {
-            content: ""; position: absolute; top: -60%; right: -10%;
-            width: 420px; height: 420px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(112, 216, 255, 0.12), transparent 70%);
-            pointer-events: none;
-        }
-        .hero::after {
-            content: ""; position: absolute; bottom: -40%; left: 20%;
-            width: 300px; height: 300px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(184, 153, 255, 0.08), transparent 70%);
-            pointer-events: none;
-        }
-        .hero-inner { position: relative; z-index: 1; }
-        .hero-kicker {
-            display: inline-flex; align-items: center; gap: 8px;
-            margin-bottom: 14px; font-size: 12px; font-weight: 800;
-            letter-spacing: 0.18em; text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        .hero-kicker::before {
-            content: ""; width: 20px; height: 2px; border-radius: 999px;
-            background: linear-gradient(90deg, rgba(112, 216, 255, 0.6), rgba(184, 153, 255, 0.4));
-        }
-        h1 {
-            font-size: clamp(34px, 6vw, 66px); line-height: 1.1;
-            margin: 0 0 14px; font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 0%, #b8e8ff 40%, #d4b8ff 70%, #ffffff 100%);
-            background-size: 200% 100%;
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 6s ease-in-out infinite;
-        }
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        .lead {
-            color: rgba(247, 252, 255, 0.65); font-size: 17px; line-height: 1.9;
-            margin: 0; max-width: 58em;
-        }
+<script src="/js/lib/preview.js"></script>
 
-        .content { display: grid; gap: 24px; }
 
-        .section-card {
-            position: relative;
-            background: var(--game-glass);
-            border: 1px solid var(--game-glass-border);
-            border-radius: var(--game-radius);
-            -webkit-backdrop-filter: blur(16px) saturate(138%);
-            backdrop-filter: blur(16px) saturate(138%);
-            padding: clamp(20px, 4vw, 30px);
-            transition: transform 0.28s cubic-bezier(.2, .8, .2, 1), box-shadow 0.28s ease, border-color 0.28s ease;
-        }
-        .section-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(255, 255, 255, 0.22);
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15), 0 0 40px rgba(112, 216, 255, 0.06);
-        }
-        .section-card h2 {
-            font-size: clamp(24px, 4vw, 38px); margin: 0 0 12px;
-            color: rgba(247, 252, 255, 0.95);
-        }
-        .section-card h3 {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: clamp(20px, 3vw, 28px); margin: 0 0 12px;
-        }
-        .section-card p {
-            color: rgba(247, 252, 255, 0.65);
-            font-size: 16px; line-height: 1.9; margin: 0 0 16px;
-        }
-        .section-card a {
-            color: rgba(184, 232, 255, 0.9);
-            font-weight: 700; text-decoration: none;
-            transition: color 0.15s ease;
-        }
-        .section-card a:hover { color: #fff; }
 
-        .step {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 22px; margin-top: 18px; overflow: hidden;
-            transition: border-color 0.24s ease, background 0.24s ease;
-        }
-        .step:hover {
-            border-color: rgba(255, 255, 255, 0.18);
-            background: rgba(255, 255, 255, 0.06);
-        }
-        .step-text { padding: 20px 22px 8px; }
 
-        .enter-btn {
-            display: inline-block;
-            margin-top: 16px; padding: 12px 28px;
-            background: rgba(141, 233, 255, 0.15);
-            border: 1px solid rgba(141, 233, 255, 0.3);
-            border-radius: 999px;
-            color: #fff; font-size: 15px; font-weight: 800;
-            text-decoration: none; letter-spacing: 0.04em;
-            transition: background 0.24s ease, transform 0.24s ease;
-        }
-        .enter-btn:hover {
-            background: rgba(141, 233, 255, 0.25);
-            transform: translateY(-2px);
-        }
 
-        .badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 999px;
-            color: rgba(247, 252, 255, 0.75);
-            font-size: 13px; font-weight: 800;
-            padding: 10px 16px;
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-        }
 
-        .footer {
-            margin-top: 56px; text-align: center;
-            font-size: 12px; color: rgba(255, 255, 255, 0.3);
-            letter-spacing: 0.05em;
-        }
 
-        @media (max-width: 720px) {
-            .game-shell { padding: 20px 16px 48px; }
-            .game-topbar { flex-direction: column; align-items: flex-start; }
-            .game-topbar-links { width: 100%; justify-content: flex-start; border-radius: 18px; overflow-x: auto; }
-            .hero { padding: 32px 24px; border-radius: 22px; }
-        }
-    </style>
-</head>
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 8.1.2"></head>
 <body>
-    <main class="game-shell">
-        <nav class="game-topbar">
-            <a class="game-topbar-brand" href="/">
-                <span class="brand-dot"></span>
-                lgb
-            </a>
-            <div class="game-topbar-links">
-                <a href="/">首页</a>
-                <a href="/about/">关于</a>
-                <a href="/archives/">归档</a>
-                <a href="/categories/">分类</a>
-                <a href="/tags/">标签</a>
-                <a href="/links/">友链</a>
-                <a class="active" href="/game/">game！</a>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
             </div>
-        </nav>
-
-        <section class="hero">
-            <div class="hero-inner">
-                <div class="hero-kicker">Game Hub</div>
-                <h1>游戏选择页</h1>
-                <p class="lead">一些有趣的小游戏，基于 Three.js 和 AI 手势识别。需要允许浏览器访问摄像头。</p>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>LGB的小站</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+        <a href="/links">
+            <i class="fa-solid fa-link fa-fw"></i>
+            <span>&ensp;Links</span>
+        </a>
+        
+        <a href="/game">
+            <i class="fa-solid fa-gamepad fa-fw"></i>
+            <span>&ensp;Game</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;LGB的小站</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+                <a href="/links">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-link fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Links</div>
+                    </div>
+                </a>
+                
+                <a href="/game">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-gamepad fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Game</div>
+                    </div>
+                </a>
+                
             </div>
-        </section>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
 
-        <section class="content">
-            <article class="section-card">
-                <h2>Magic Christmas Tree</h2>
-                <h3>魔法圣诞树 · 手势控制</h3>
-                <p>基于 Three.js + MediaPipe Hands 的手势识别游戏。摄像头捕捉手部动作，实时控制粒子效果。</p>
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>游戏</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2026/6/13
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h2 id="Magic-Christmas-Tree"><a href="#Magic-Christmas-Tree" class="headerlink" title="Magic Christmas Tree"></a>Magic Christmas Tree</h2><p>基于 Three.js + MediaPipe Hands 手势识别的魔法圣诞树。</p>
+<p><strong>操作方式（需要摄像头）：</strong></p>
+<ul>
+<li>✊ 握拳 → 聚合圣诞树</li>
+<li>🖐️ 张手 → 释放星云</li>
+<li>👋 挥手 → 召唤相册（继续挥手切换照片墙、环形画廊）</li>
+<li>支持上传自定义相册</li>
+</ul>
+<p><a href="/game/christmas-tree.html">进入游戏</a></p>
 
-                <div class="step">
-                    <div class="step-text">
-                        <p><strong>✊ 握拳</strong>：聚合圣诞树 / 返回树形态</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-text">
-                        <p><strong>🖐️ 张手</strong>：释放粒子成星云</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-text">
-                        <p><strong>👋 挥手</strong>：召唤相册，继续挥手可切换照片、照片墙、环形画廊</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-text">
-                        <p>支持上传自定义相册，照片会以 3D 形式融入圣诞树粒子中。</p>
-                    </div>
-                </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
 
-                <a class="enter-btn" href="/game/christmas-tree.html">进入游戏 →</a>
-            </article>
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2025 - 2026 lgb的小站
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;lgb
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
 
-            <article class="section-card">
-                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-                    <p style="margin:0;">更多游戏即将上线，敬请期待~</p>
-                    <span class="badge">Coming Soon</span>
-                </div>
-            </article>
-        </section>
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <div id="tab-title-config"
+        data-enable="1"
+        data-active-title="lgb的小站"
+        data-active-delay="2600"
+        data-default-title="lgb的小站"
+        data-inactive-title="∑(っ°Д°;)っ诶，不见了"
+        data-inactive-scroll-speed="180" hidden></div>
+    <script>
+        (() => {
+            const cfg = document.getElementById("tab-title-config");
+            if (!cfg || cfg.dataset.enable !== "1") return;
+            const dft = cfg.dataset.defaultTitle || document.title;
+            const act = cfg.dataset.activeTitle || dft;
+            const inact = cfg.dataset.inactiveTitle || dft;
+            const delay = Number(cfg.dataset.activeDelay) || 2600;
+            const speed = Number(cfg.dataset.inactiveScrollSpeed) || 180;
+            let timer = null, idx = 0;
+            function scrollTitle(text) {
+                idx = (idx + 1) % (text.length + 1);
+                document.title = text.substring(idx) + text.substring(0, idx);
+                timer = setTimeout(() => scrollTitle(text), speed);
+            }
+            function stopScroll() { clearTimeout(timer); timer = null; }
+            function onVis() {
+                if (document.hidden) { stopScroll(); scrollTitle(inact); }
+                else { stopScroll(); document.title = act; setTimeout(() => { document.title = dft; }, delay); }
+            }
+            document.addEventListener("visibilitychange", onVis);
+            document.title = dft;
+        })();
+    </script>
+    <script src="/js/main.js"></script>
+    
+    
 
-        <div class="footer">lgb Game Hub</div>
-    </main>
+
+
+
+    
 </body>
 </html>
